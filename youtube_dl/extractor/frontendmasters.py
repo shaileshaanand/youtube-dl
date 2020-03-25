@@ -151,13 +151,20 @@ class FrontendMastersIE(FrontendMastersBaseIE):
             for quality in ('low', 'mid', 'high'):
                 resolution = self._QUALITIES[quality].copy()
                 format_id = '%s-%s' % (ext, quality)
+                referer = None
+                try:
+                    reffile = open('referer.txt', 'r')
+                    referer = reffile.readline()
+                    reffile.close()
+                except:
+                    pass
                 format_url = self._download_json(
                     source_url, lesson_id,
                     'Downloading %s source JSON' % format_id, query={
                         'f': ext,
                         'r': resolution['height'],
                     }, headers={
-                        'Referer': url,
+                        'Referer': referer or url,
                     }, fatal=False)['url']
 
                 if not format_url:
@@ -240,6 +247,9 @@ class FrontendMastersCourseIE(FrontendMastersPageBaseIE):
             FrontendMastersBaseIE, cls).suitable(url)
 
     def _real_extract(self, url):
+        ref_file = open('referer.txt', 'w')
+        ref_file.write(url)
+        ref_file.close()
         course_name = self._match_id(url)
 
         course = self._download_course(course_name, url)
