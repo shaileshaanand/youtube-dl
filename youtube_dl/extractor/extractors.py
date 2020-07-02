@@ -248,6 +248,10 @@ from .curiositystream import (
     CuriosityStreamCollectionIE,
 )
 from .cwtv import CWTVIE
+from .cxl import (
+    CxlIE,
+    CxlCourseIE,
+)
 from .dailymail import DailyMailIE
 from .dailymotion import (
     DailymotionIE,
